@@ -1,39 +1,14 @@
 import { get } from '../request'
 
-// ============ 类型 ============
-export interface PriceDetail {
-  price: number
-  kmLimit: number
-  overtimeRate: number
-  overKmRate: number
-  serviceFee?: number
-}
+// 复用 @/types 作为唯一的类型来源
+export type {
+  PriceDetail,
+  CarPriceMap,
+  CarInfo,
+  DurationOption,
+} from '@/types'
 
-export type CarPriceMap = Record<string, PriceDetail>
-
-export interface CarInfo {
-  id: number
-  name: string
-  seats: string
-  model: string
-  capacity: string
-  tags: string[]
-  hourlyPrice: number
-  dailyPrice: number
-  color: string
-  imageUrl?: string
-  status: 'available' | 'busy' | 'offline'
-  plate?: string
-  carModelId?: string
-  prices?: CarPriceMap
-}
-
-export interface DurationOption {
-  label: string
-  sublabel: string
-  kmLimit?: number
-}
-
+// ============ 模块专属类型 ============
 export interface CarListResult {
   cars: CarInfo[]
   hourlyDurations: DurationOption[]

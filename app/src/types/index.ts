@@ -50,6 +50,8 @@ export interface CarInfo {
   carModelId?: string
   /** 价格配置映射 */
   prices?: CarPriceMap
+  /** 所属组织名称 */
+  orgName?: string
 }
 
 export interface DurationOption {
