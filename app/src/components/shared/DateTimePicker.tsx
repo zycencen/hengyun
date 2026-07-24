@@ -220,7 +220,7 @@ export function DateTimePicker({ open, onOpenChange, value, onConfirm }: DateTim
                   selectedDate.year === today.getFullYear() &&
                   selectedDate.month === today.getMonth() &&
                   selectedDate.day === today.getDate()
-                const timeDisabled = isSelectedToday && (() => {
+                const timeDisabled = !!isSelectedToday && (() => {
                   const [h, m] = time.split(':').map(Number)
                   const slotDate = new Date(selectedDate!.year, selectedDate!.month, selectedDate!.day, h, m)
                   return slotDate < minDatetime

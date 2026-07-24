@@ -30,6 +30,7 @@ export interface InvoiceRecord {
 
 /** 开票申请参数 */
 export interface ApplyInvoiceParams {
+  [key: string]: unknown
   orderIds: number[]
   invoiceType: string   // '个人' | '企业'
   title: string

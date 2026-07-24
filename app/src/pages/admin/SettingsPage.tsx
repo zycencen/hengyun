@@ -454,7 +454,7 @@ export function AdminSettingsPage() {
           kmLimit: item.kmLimit,
           overtimeRate: item.overtimeRate,
           overKmRate: item.overKmRate,
-          serviceFee: item.serviceFee,
+          serviceFee: item.serviceFee ?? 0,
         })
         setPrices(prev => prev.map(p => p.id === item.id ? { ...p, ...(updated as AdminPriceItem) } : p))
       } else {
@@ -467,7 +467,7 @@ export function AdminSettingsPage() {
           kmLimit: item.kmLimit,
           overtimeRate: item.overtimeRate,
           overKmRate: item.overKmRate,
-          serviceFee: item.serviceFee,
+          serviceFee: item.serviceFee ?? 0,
         })
         setPrices(prev => [...prev, created as unknown as PriceConfig])
       }

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { MapPin, Navigation, Star, Truck, UserCheck, Phone, FileText, Link2, X, Clock, AlertTriangle } from 'lucide-react'
 import type { OrderInfo, DriverInfo, ContractInfo, BizType } from '@/types'
 import { getAdminOrders, getDrivers, getContracts, dispatchOrder, checkVehicleConflict } from '@/api/modules/admin'
-import { MOCK_MAP_VEHICLES, MOCK_DRIVERS } from '@/data/adminDefaults'
+import { MOCK_MAP_VEHICLES } from '@/data/adminDefaults'
 
 interface RecommendedDriver extends DriverInfo {
   score: number

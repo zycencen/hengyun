@@ -57,7 +57,7 @@ export function VehicleCalendar() {
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()))
   const [vehicles, setVehicles] = useState<CarInfo[]>([])
   const [events, setEvents] = useState<VehicleCalendarEvent[]>([])
-  const [loadingEvents, setLoadingEvents] = useState(false)
+  const [, setLoadingEvents] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [pickerDate, setPickerDate] = useState(() => new Date())
 

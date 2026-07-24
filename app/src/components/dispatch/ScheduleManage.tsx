@@ -74,7 +74,7 @@ export function ScheduleManage() {
 
   // 下拉数据
   const [fleets, setFleets] = useState<FleetItem[]>([])
-  const [contracts, setContracts] = useState<AdminContractItem[]>([])
+  const [, setContracts] = useState<AdminContractItem[]>([])
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
 

@@ -224,7 +224,6 @@ export function ShiftManage() {
         activeFrom: form.activeFrom,
         activeTo: form.activeTo,
         driverId: form.driverId,
-        createdAt: new Date().toISOString().slice(0, 10),
       })
       showToast('班次创建成功')
     }

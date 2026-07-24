@@ -186,6 +186,7 @@ export interface DriverInfo {
   avatar?: string
   licenseNo: string
   vehiclePlate: string
+  carPlate?: string        // 车牌（别名字段）
   vehicleType: string
   status: 'online' | 'offline' | 'busy' | 'pending'
   rating: number

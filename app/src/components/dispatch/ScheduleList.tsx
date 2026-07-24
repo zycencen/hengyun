@@ -60,8 +60,8 @@ export function ScheduleList() {
   const [dateTo, setDateTo] = useState(() => new Date().toISOString().slice(0, 10))
   const [fleetFilter, setFleetFilter] = useState('all')
   const [page, setPage] = useState(1)
+  const [, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [totalPages, setTotalPages] = useState(1)
   const [fleets, setFleets] = useState<FleetItem[]>([])
   const pageSize = 10
 
@@ -496,7 +496,7 @@ export function ScheduleList() {
             </button>
           </div>
           <div className="space-y-2 max-h-72 overflow-y-auto pr-0.5">
-            {genFiltered.map((g, idx) => (
+            {genFiltered.map((g) => (
               <div key={`gen-${g.shiftId}-${g.date}`}
                 className="rounded-xl border p-4 bg-violet-50/30 border-violet-200 border-dashed hover:shadow-sm transition-shadow"
               >

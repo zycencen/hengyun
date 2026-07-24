@@ -50,6 +50,7 @@ export interface AdminDriverItem {
   vehiclePlate: string; vehicleType: string; status: string; rating: number
   orderCount: number; joinDate: string; city: string
   carId?: number | null; carPlate?: string; carModelName?: string; carSeats?: string; carImageUrl?: string
+  fleetName?: string; fleet?: string
   orgId?: string | null; orgName?: string
   corpUserId?: string
 }
