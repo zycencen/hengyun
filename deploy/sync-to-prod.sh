@@ -98,8 +98,8 @@ if [ ! -f "$PROD_DIR/data.db" ]; then
   log "首次同步，初始化正式数据库..."
   cd $PROD_DIR/server
   node -e "
-    const { initDb } = require('./src/db');
-    initDb();
+    const { getDb } = require('./src/db');
+    getDb();
     console.log('正式数据库初始化完成');
   " || warn "数据库初始化失败，请手动检查"
 else
@@ -110,14 +110,15 @@ mkdir -p $PROD_DIR/uploads
 
 # ---------- 6. 重启正式环境 ----------
 log "重启正式环境 API 服务..."
-if pm2 list 2>/dev/null | grep -q "hengyun-prod-api"; then
-  pm2 restart hengyun-prod-api
+PM2=$(which pm2 2>/dev/null || echo "npx pm2")
+if $PM2 list 2>/dev/null | grep -q "hengyun-prod-api"; then
+  $PM2 restart hengyun-prod-api
 else
   cd $BASE
-  pm2 start deploy/ecosystem.config.js --only hengyun-prod-api
+  $PM2 start deploy/ecosystem.config.js --only hengyun-prod-api
 fi
 
-pm2 save 2>/dev/null || true
+$PM2 save 2>/dev/null || true
 
 # ---------- 7. 重载 Nginx ----------
 log "重载 Nginx..."
