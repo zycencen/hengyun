@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AppProvider, useAppContext, useNavigation } from '@/store'
 import { useUser } from '@/hooks'
@@ -7,7 +7,7 @@ import { BottomTabBar } from '@/components/shared/BottomTabBar'
 import { Toast } from '@/components/shared/Toast'
 import { PageContainer } from '@/components/shared/PageContainer'
 import { AdminLayout, type AdminMenuItem } from '@/components/admin/AdminLayout'
-import { getFleetEntryConfig, type FleetEntryConfig } from '@/api/modules/fleet'
+import { getFleetEntryConfig } from '@/api/modules/fleet'
 import {
   LayoutDashboard, ClipboardList, Truck, Users, UserCheck,
   FileText, Settings, DollarSign, CalendarCheck, Headphones, Inbox, Car, Star, Rocket

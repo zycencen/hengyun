@@ -1,4 +1,5 @@
 import { get } from '../request'
+import type { CarInfo, DurationOption } from '@/types'
 
 // 复用 @/types 作为唯一的类型来源
 export type {

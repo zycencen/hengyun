@@ -591,7 +591,7 @@ export interface ManualOrderParams {
   orgId?: string
 }
 export function createManualOrder(params: ManualOrderParams) {
-  return post<AdminOrderItem>('/admin/orders/manual', params as Record<string, unknown>)
+  return post<AdminOrderItem>('/admin/orders/manual', params as unknown as Record<string, unknown>)
 }
 
 /** 结账（追加付款） */
