@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { MOCK_CUSTOMERS } from '@/data/adminDefaults'
 import { getCustomers, updateCustomer, getUserOrgs, updateUserOrgs, getOrganizations } from '@/api/modules/admin'
-import { Search, Building2, Eye, Ban, Check, X, UserCheck, Crown, Layers, Trash2 } from 'lucide-react'
+import { Search, Building2, Eye, Ban, Check, X, UserCheck, Crown, Layers } from 'lucide-react'
 
 export function UserManagePage() {
   const [users, setUsers] = useState(MOCK_CUSTOMERS)
@@ -23,7 +23,7 @@ export function UserManagePage() {
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2000) }
 
   // 切换用户类型
-  const handleToggleUserType = async (id: number, currentType: string) => {
+  const handleToggleUserType = async (id: string, currentType: string) => {
     const newType = currentType === '大客户用户' ? '普通用户' : '大客户用户'
     // 乐观更新
     setUsers(prev => prev.map(u => u.id === id ? { ...u, userType: newType } : u))

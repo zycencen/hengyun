@@ -1,6 +1,7 @@
 import { get, post, put, del } from '../request'
 import request from '../request'
 import type { OrderStatus } from './order'
+import type { PackageType } from '@/types'
 
 // ============ 类型 ============
 export interface AdminLoginParams {
@@ -84,16 +85,16 @@ export interface AdminContractTemplate {
 
 export interface AdminCarModelItem {
   id: string; name: string; brand: string; model: string; seats: number
-  category: string; tags: string[]; imageUrl?: string; status: string
+  category: string; tags: string[]; imageUrl?: string; status: 'active' | 'inactive'
 }
 
 export interface AdminPriceItem {
-  id: string; carModelId: string; carModelName: string; packageType: string
-  duration: string; price: number; kmLimit: number; overtimeRate: number; overKmRate: number; serviceFee: number; status: string
+  id: string; carModelId: string; carModelName: string; packageType: PackageType
+  duration: string; price: number; kmLimit: number; overtimeRate: number; overKmRate: number; serviceFee: number; status: 'active' | 'inactive'
 }
 
 export interface AdminCustomerItem {
-  id: number; name: string; phone: string; company: string
+  id: string; name: string; phone: string; company: string
   isVip: boolean; isEnterpriseVerified: boolean
   userType: string; status: string; orderCount: number; totalAmount: number; createdAt: string
   orgs?: { id: string; name: string }[]
@@ -289,7 +290,7 @@ export function getCustomers() {
 }
 
 /** 更新用户（设置用户类型等） */
-export function updateCustomer(id: number, data: { userType?: string }) {
+export function updateCustomer(id: string, data: { userType?: string }) {
   return put<AdminCustomerItem>(`/admin/users/${id}`, data)
 }
 
