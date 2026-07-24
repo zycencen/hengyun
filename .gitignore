@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Runtime logs
+*.log
+
+# Test artifacts
+test_*.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database (每个环境独立)
+*.db
+*.db-journal
+*.db-wal
+
+# Uploads (每个环境独立)
+uploads/
+
+# Environment config (含密钥)
+.env
+.env.local
+.env.*.local
+
+# Generated images
+generated-images/
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+
+# Deployment packages
+deploy/*.tar.gz

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据库管理 - 恒运出行</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a2e;display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:#1a1a2e;color:#fff;display:flex;flex-direction:column}
+.sidebar-header{padding:16px;font-size:16px;font-weight:700;border-bottom:1px solid #2d2d4a;display:flex;align-items:center;gap:8px}
+.sidebar-header .dot{width:8px;height:8px;background:#4ade80;border-radius:50%}
+.table-list{flex:1;overflow-y:auto;padding:8px 0}
+.table-list .item{padding:10px 16px;cursor:pointer;font-size:13px;display:flex;justify-content:space-between;align-items:center;transition:background .15s;border-left:3px solid transparent}
+.table-list .item:hover{background:#2d2d4a}
+.table-list .item.active{background:#2d2d4a;border-left-color:#4ade80;color:#4ade80}
+.table-list .item .count{font-size:11px;color:#888;background:#12122a;padding:1px 8px;border-radius:10px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.toolbar{padding:12px 20px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.toolbar select{padding:6px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;min-width:180px}
+.toolbar input{padding:6px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;width:240px}
+.toolbar button{padding:6px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s}
+.btn-query{background:#3b82f6;color:#fff}.btn-query:hover{background:#2563eb}
+.btn-export{background:#10b981;color:#fff}.btn-export:hover{background:#059669}
+.btn-danger{background:#ef4444;color:#fff}.btn-danger:hover{background:#dc2626}
+.btn-small{padding:3px 10px;font-size:12px;border-radius:4px;cursor:pointer;border:none}
+.content-area{flex:1;overflow:auto;padding:16px 20px}
+.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);font-size:13px}
+.data-table th{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;white-space:nowrap;position:sticky;top:0}
+.data-table td{padding:8px 12px;border-bottom:1px solid #f1f5f9;color:#334155;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.data-table tr:hover td{background:#f8fafc}
+.info-bar{padding:8px 20px;font-size:12px;color:#64748b;background:#fff;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between}
+.empty-state{text-align:center;padding:60px 20px;color:#94a3b8}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:12px;padding:24px;width:500px;max-height:80vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h3{margin-bottom:16px;font-size:16px}
+.modal textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:6px;font-family:'SF Mono',Consolas,monospace;font-size:13px;min-height:100px;resize:vertical;box-sizing:border-box}
+.modal .actions{margin-top:16px;display:flex;gap:8px;justify-content:flex-end}
+.btn-cancel{background:#e5e7eb;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:13px}
+.error-banner{background:#fef2f2;color:#dc2626;padding:12px 20px;margin:12px 20px;border-radius:8px;display:none;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header"><span class="dot"></span> 数据库管理</div>
+  <div class="table-list" id="tableList">
+    <div style="padding:20px;text-align:center;color:#888;">加载中...</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="error-banner" id="errorBanner"></div>
+  <div class="toolbar">
+    <select id="tableSelect" onchange="selectTable(this.value)">
+      <option value="">选择数据表...</option>
+    </select>
+    <input type="text" id="filterInput" placeholder="输入关键词过滤..." oninput="applyFilter()">
+    <button class="btn-query" onclick="executeCustomSQL()">SQL 查询</button>
+    <button class="btn-export" onclick="exportCSV()">导出 CSV</button>
+    <button class="btn-danger" onclick="showSQLModal()">执行 SQL</button>
+  </div>
+  <div class="content-area" id="contentArea">
+    <div class="empty-state">
+      <div class="icon">&#x1F4CA;</div>
+      <div>请从左侧选择一个数据表</div>
+    </div>
+  </div>
+  <div class="info-bar">
+    <span id="infoText">就绪</span>
+    <span id="infoTime"></span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sqlModal">
+  <div class="modal">
+    <h3>执行 SQL 语句</h3>
+    <textarea id="sqlInput" placeholder="输入 SQL 语句...例如：UPDATE orders SET status = 'completed' WHERE id = 'xxx'"></textarea>
+    <div class="actions">
+      <button class="btn-danger" onclick="executeSQL()">执行</button>
+      <button class="btn-cancel" onclick="closeSQLModal()">取消</button>
+    </div>
+    <div id="sqlResult" style="margin-top:12px;font-size:12px;"></div>
+  </div>
+</div>
+
+<script>
+var currentTable = '';
+var currentData = [];
+var currentColumns = [];
+
+function showError(msg) {
+  var el = document.getElementById('errorBanner');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 5000);
+}
+
+function loadTables() {
+  fetch('/api/db-admin/tables')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var list = document.getElementById('tableList');
+      var select = document.getElementById('tableSelect');
+      if (!data || data.length === 0) {
+        list.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">无数据表</div>';
+        return;
+      }
+      list.innerHTML = data.map(function(t) {
+        return '<div class="item" onclick="selectTable(\'' + t.name + '\')">' +
+          '<span>' + t.name + '</span>' +
+          '<span class="count">' + t.count + '</span>' +
+          '</div>';
+      }).join('');
+      select.innerHTML = '<option value="">选择数据表...</option>' +
+        data.map(function(t) {
+          return '<option value="' + t.name + '">' + t.name + ' (' + t.count + '条)</option>';
+        }).join('');
+    })
+    .catch(function(e) {
+      showError('加载表列表失败: ' + e.message);
+      document.getElementById('tableList').innerHTML =
+        '<div style="padding:20px;text-align:center;color:#ef4444;">加载失败，请检查后端服务是否启动</div>';
+    });
+}
+
+function selectTable(name) {
+  currentTable = name;
+  var items = document.querySelectorAll('.table-list .item');
+  items.forEach(function(el) { el.classList.remove('active'); });
+  items.forEach(function(el) {
+    if (el.textContent.indexOf(name) !== -1) el.classList.add('active');
+  });
+  document.getElementById('tableSelect').value = name;
+  document.getElementById('filterInput').value = '';
+  loadTableData(name, '');
+}
+
+function loadTableData(table, filter) {
+  var url = '/api/db-admin/table/' + encodeURIComponent(table);
+  if (filter) url += '?filter=' + encodeURIComponent(filter);
+  fetch(url)
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      currentData = data.rows;
+      currentColumns = data.columns;
+      renderTable(data.columns, data.rows, data.total);
+    })
+    .catch(function(e) {
+      showError('加载表数据失败: ' + e.message);
+    });
+}
+
+function renderTable(columns, rows, total) {
+  var area = document.getElementById('contentArea');
+  if (!columns || columns.length === 0) {
+    area.innerHTML = '<div class="empty-state"><div class="icon">&#x1F4ED;</div><div>表为空</div></div>';
+    document.getElementById('infoText').textContent = currentTable + ' - 0 条记录';
+    return;
+  }
+  var html = '<div style="overflow-x:auto"><table class="data-table"><thead><tr>';
+  html += '<th>#</th>';
+  columns.forEach(function(c) { html += '<th>' + c + '</th>'; });
+  html += '<th style="width:100px">操作</th>';
+  html += '</tr></thead><tbody>';
+
+  rows.forEach(function(row, i) {
+    html += '<tr>';
+    html += '<td>' + (i + 1) + '</td>';
+    columns.forEach(function(c) {
+      var val = row[c];
+      if (val === null || val === undefined) val = '<i style="color:#94a3b8">NULL</i>';
+      else if (val === '') val = '<i style="color:#cbd5e1">空</i>';
+      else {
+        var escaped = String(val).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        val = escaped;
+      }
+      html += '<td title="' + (row[c] !== null && row[c] !== undefined ? String(row[c]).replace(/"/g, '&quot;') : '') + '">' + val + '</td>';
+    });
+    html += '<td><button class="btn-small btn-danger" onclick="deleteRow(\'' + String(row[columns[0]]).replace(/'/g, "\\'") + '\')">删除</button></td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  area.innerHTML = html;
+  document.getElementById('infoText').textContent = currentTable + ' - 显示 ' + rows.length + ' / ' + total + ' 条记录';
+  document.getElementById('infoTime').textContent = new Date().toLocaleTimeString();
+}
+
+function deleteRow(id) {
+  if (!confirm('确定删除 ' + currentColumns[0] + ' = ' + id + ' 这条记录吗？')) return;
+  fetch('/api/db-admin/table/' + encodeURIComponent(currentTable) + '/' + encodeURIComponent(id), { method: 'DELETE' })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        loadTableData(currentTable, document.getElementById('filterInput').value);
+      } else {
+        showError('删除失败: ' + data.error);
+      }
+    })
+    .catch(function(e) { showError('删除失败: ' + e.message); });
+}
+
+function applyFilter() {
+  var filter = document.getElementById('filterInput').value;
+  if (currentTable) loadTableData(currentTable, filter);
+}
+
+function exportCSV() {
+  if (!currentTable) { alert('请先选择一个表'); return; }
+  fetch('/api/db-admin/table/' + encodeURIComponent(currentTable))
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var BOM = '\uFEFF';
+      var csv = BOM + data.columns.join(',') + '\n';
+      data.rows.forEach(function(row) {
+        csv += data.columns.map(function(c) {
+          var v = String(row[c] != null ? row[c] : '');
+          if (v.indexOf(',') !== -1 || v.indexOf('"') !== -1 || v.indexOf('\n') !== -1) {
+            v = '"' + v.replace(/"/g, '""') + '"';
+          }
+          return v;
+        }).join(',') + '\n';
+      });
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = currentTable + '_' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
+    })
+    .catch(function(e) { showError('导出失败: ' + e.message); });
+}
+
+function showSQLModal() {
+  document.getElementById('sqlModal').classList.add('show');
+  document.getElementById('sqlResult').innerHTML = '';
+  document.getElementById('sqlInput').focus();
+}
+
+function closeSQLModal() {
+  document.getElementById('sqlModal').classList.remove('show');
+}
+
+function executeSQL() {
+  var sql = document.getElementById('sqlInput').value.trim();
+  if (!sql) return;
+  fetch('/api/db-admin/execute', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sql: sql })
+  })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var result = document.getElementById('sqlResult');
+      if (data.error) {
+        result.innerHTML = '<div style="color:#ef4444">' + data.error + '</div>';
+      } else if (data.rows) {
+        result.innerHTML = '<div style="color:#10b981">查询成功，返回 ' + data.rows.length + ' 条结果</div>';
+        if (data.rows.length > 0 && data.rows.length <= 50) {
+          currentData = data.rows;
+          currentColumns = data.columns;
+          currentTable = '';
+          renderTable(data.columns, data.rows, data.rows.length);
+          closeSQLModal();
+        }
+      } else {
+        result.innerHTML = '<div style="color:#10b981">执行成功，影响行数: ' + (data.changes || 0) + '</div>';
+        // 刷新当前表
+        if (currentTable) loadTableData(currentTable, document.getElementById('filterInput').value);
+      }
+    })
+    .catch(function(e) { showError('执行失败: ' + e.message); });
+}
+
+function executeCustomSQL() {
+  var sql = prompt('输入 SELECT 查询语句:');
+  if (!sql) return;
+  fetch('/api/db-admin/execute', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sql: sql })
+  })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) { alert('查询失败: ' + data.error); return; }
+      if (data.rows && data.rows.length > 0) {
+        currentData = data.rows;
+        currentColumns = data.columns;
+        currentTable = '';
+        renderTable(data.columns, data.rows, data.rows.length);
+      } else {
+        alert('查询无结果');
+      }
+    })
+    .catch(function(e) { alert('查询失败: ' + e.message); });
+}
+
+// modal 点击外部关闭
+document.getElementById('sqlModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSQLModal();
+});
+
+// 页面加载时获取表列表
+loadTables();
+</script>
+</body>
+</html>
