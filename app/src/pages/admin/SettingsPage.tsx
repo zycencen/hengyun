@@ -7,12 +7,12 @@ import {
   getCities, createCity, deleteCity, getFleets, type FleetItem,
   createPrice, updatePrice, togglePrice, deletePrice,
 } from '@/api/modules/admin'
-import type { CarModelConfig, PriceConfig, AdminUser, PackageType, Organization, Role, PermissionDef } from '@/types'
+import type { CarModelConfig, PriceConfig, AdminUser, PackageType, Organization } from '@/types'
 import type { OrgItem, RoleItem, PermissionDefItem, CityItem, AdminPriceItem } from '@/api/modules/admin'
 import {
   Car, DollarSign, MapPin, Shield, Plus, Search,
   Edit3, Trash2, X, Network, Key, ChevronRight, ChevronDown,
-  FolderTree, FolderOpen, Users, Truck,
+  FolderTree, FolderOpen, Truck,
 } from 'lucide-react'
 
 type SettingsTab = 'car-models' | 'prices' | 'cities' | 'accounts' | 'roles'
@@ -254,7 +254,7 @@ function AdminUserModal({ init, orgs, onSave, onClose }: {
   const isEdit = !!init
   const [username, setUsername] = useState(init?.username || '')
   const [name, setName] = useState(init?.name || '')
-  const [role, setRole] = useState(init?.role || 'operator')
+  const [role, setRole] = useState<string>(init?.role || 'operator')
   const [phone, setPhone] = useState(init?.phone || '')
   const [password, setPassword] = useState('')
   const [orgId, setOrgId] = useState(init?.orgId || '')
@@ -361,17 +361,15 @@ export function AdminSettingsPage() {
 
   // 组织架构数据
   const [orgs, setOrgs] = useState<OrgItem[]>([])
-  const [orgLoaded, setOrgLoaded] = useState(false)
-  const loadOrgs = () => { getOrganizations().then(d => { setOrgs(d as any); setOrgLoaded(true) }).catch(() => {}) }
+  const loadOrgs = () => { getOrganizations().then(d => { setOrgs(d as any) }).catch(() => {}) }
   useEffect(() => { loadOrgs() }, [])
 
   // 角色权限数据
   const [roles, setRoles] = useState<RoleItem[]>([])
   const [permDefs, setPermDefs] = useState<PermissionDefItem[]>([])
-  const [rolesLoaded, setRolesLoaded] = useState(false)
   const loadRoles = () => {
     Promise.all([getRoles(), getPermissionDefs()])
-      .then(([r, p]) => { setRoles(r as any); setPermDefs(p as any); setRolesLoaded(true) })
+      .then(([r, p]) => { setRoles(r as any); setPermDefs(p as any) })
       .catch(() => {})
   }
   useEffect(() => { loadRoles() }, [])
