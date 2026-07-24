@@ -1,4 +1,4 @@
-import type { CarInfo, DurationOption, OrderInfo, ReviewInfo, InvoiceInfo } from '@/types'
+import type { CarInfo, DurationOption, OrderInfo, ReviewInfo } from '@/types'
 
 // ============ 默认车辆数据（API 不可用时的降级方案） ============
 export const DEFAULT_CARS: CarInfo[] = [

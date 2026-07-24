@@ -250,7 +250,7 @@ export interface PriceConfig {
   kmLimit: number
   overtimeRate: number
   overKmRate: number
-  serviceFee: number
+  serviceFee?: number
   status: 'active' | 'inactive'
   orgName?: string
 }
