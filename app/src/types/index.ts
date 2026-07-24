@@ -27,7 +27,7 @@ export interface PriceDetail {
   kmLimit: number
   overtimeRate: number
   overKmRate: number
-  serviceFee: number
+  serviceFee?: number
 }
 
 /** 车辆价格映射：key = "hourly_4小时" 或 "daily_1天" */

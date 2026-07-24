@@ -373,19 +373,19 @@ export default function OrderDetailPage() {
                 <span className="text-slate-500">服务费</span>
                 <span className="text-slate-700 font-medium">¥{order.serviceFee}</span>
               </div>
-              {order.kmLimit > 0 && (
+              {order.kmLimit && order.kmLimit > 0 && (
                 <div className="flex justify-between items-center py-3 px-3.5 text-sm">
                   <span className="text-slate-500">里程限制</span>
                   <span className="text-slate-700 font-medium">{order.kmLimit}km</span>
                 </div>
               )}
-              {order.overtimeRate > 0 && (
+              {order.overtimeRate && order.overtimeRate > 0 && (
                 <div className="flex justify-between items-center py-3 px-3.5 text-sm">
                   <span className="text-slate-500">超时费</span>
                   <span className="text-slate-700 font-medium">¥{order.overtimeRate}/小时</span>
                 </div>
               )}
-              {order.overKmRate > 0 && (
+              {order.overKmRate && order.overKmRate > 0 && (
                 <div className="flex justify-between items-center py-3 px-3.5 text-sm">
                   <span className="text-slate-500">超公里费</span>
                   <span className="text-slate-700 font-medium">¥{order.overKmRate}/km</span>
@@ -524,19 +524,19 @@ export default function OrderDetailPage() {
                 <span className="text-slate-500">服务费</span>
                 <span className="text-slate-700">¥{order.serviceFee}</span>
               </div>
-              {order.kmLimit > 0 && (
+              {order.kmLimit && order.kmLimit > 0 && (
                 <div className="flex justify-between">
                   <span className="text-slate-500">里程限制</span>
                   <span className="text-slate-700">{order.kmLimit}km</span>
                 </div>
               )}
-              {order.overtimeRate > 0 && (
+              {order.overtimeRate && order.overtimeRate > 0 && (
                 <div className="flex justify-between">
                   <span className="text-slate-500">超时费</span>
                   <span className="text-slate-700">¥{order.overtimeRate}/小时</span>
                 </div>
               )}
-              {order.overKmRate > 0 && (
+              {order.overKmRate && order.overKmRate > 0 && (
                 <div className="flex justify-between">
                   <span className="text-slate-500">超公里费</span>
                   <span className="text-slate-700">¥{order.overKmRate}/km</span>

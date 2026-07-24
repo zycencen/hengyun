@@ -417,8 +417,6 @@ function AddContractModal({ onClose, onAdd }: { onClose: () => void; onAdd: (c: 
               value={form.plateNo}
               onChange={e => {
                 const plate = e.target.value
-                // 自动填充驾驶员（如果该车辆有关联司机）
-                const _vehicle = vehicles.find(v => v.plate === plate)
                 setForm(f => ({ ...f, plateNo: plate, driverName: '' }))
               }}
               className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"

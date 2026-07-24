@@ -11,7 +11,7 @@ export function useOrders(initialFilter: OrderStatus | 'all' = 'all') {
   const [total, setTotal] = useState(0)
 
   const sortByOrderTime = (list: OrderItem[]) => {
-    return [...list].sort((a, b) => new Date(b.orderTime).getTime() - new Date(a.orderTime).getTime())
+    return [...list].sort((a, b) => new Date(b.orderTime ?? '').getTime() - new Date(a.orderTime ?? '').getTime())
   }
 
   const fetchOrders = useCallback(async (params?: OrderListParams) => {
