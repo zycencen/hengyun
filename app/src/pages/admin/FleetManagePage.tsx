@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   Search, Plus, Edit3, Trash2, Settings2, ShieldCheck, ShieldX, Building2,
   Phone, User, Users, Truck, ClipboardList, Star,
-  QrCode, Copy, Download, Check, Link2, Layout, Image, Type, Loader2
+  QrCode, Copy, Download, Check, Layout, Image, Type, Loader2
 } from 'lucide-react'
 import QRCode from 'qrcode'
 import {

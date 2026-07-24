@@ -65,7 +65,6 @@ export default function SettingsPage() {
                   <div className="text-xs text-slate-400 mt-0.5">{item.desc}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {item.badge && <span className="text-xs text-slate-400">{item.badge}</span>}
                   <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
                 </div>
               </div>

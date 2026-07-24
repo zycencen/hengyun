@@ -7,7 +7,7 @@ import {
   getCities, createCity, deleteCity, getFleets, type FleetItem,
   createPrice, updatePrice, togglePrice, deletePrice,
 } from '@/api/modules/admin'
-import type { CarModelConfig, PriceConfig, AdminUser, PackageType, Organization } from '@/types'
+import type { CarModelConfig, PriceConfig, AdminUser, PackageType } from '@/types'
 import type { OrgItem, RoleItem, PermissionDefItem, CityItem, AdminPriceItem } from '@/api/modules/admin'
 import {
   Car, DollarSign, MapPin, Shield, Plus, Search,

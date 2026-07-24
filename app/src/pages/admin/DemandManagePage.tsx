@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getCommuteDemands, getCustomDemands, updateDemand, type DemandItem, type DemandType } from '@/api/modules/admin'
-import { Search, Phone, MapPin, Building2, FileText, MessageSquare, RefreshCw, ChevronDown } from 'lucide-react'
+import { Search, Phone, MapPin, Building2, FileText, MessageSquare, RefreshCw } from 'lucide-react'
 
 const STATUS_OPTIONS = ['待处理', '已联系', '已成交', '已关闭']
 const STATUS_COLORS: Record<string, string> = {

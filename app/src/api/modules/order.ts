@@ -23,6 +23,7 @@ export interface OrderItem {
   orderNo: string
   route: string
   departCity: string
+  orderTime?: string       // 下单时间
   departTime: string
   packageType: PackageType
   duration: string

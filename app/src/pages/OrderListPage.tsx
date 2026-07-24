@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useOrders } from '@/hooks'
 import { useAppContext, useNavigation } from '@/store'
 import { SubNavbar } from '@/components/shared/SubNavbar'
-import { ORDER_STATUS_MAP } from '@/types'
+
 import type { OrderStatus } from '@/types'
 import { Clock, CheckCircle2, Car, Navigation, FileCheck, Ban } from 'lucide-react'
 
@@ -94,7 +94,6 @@ export default function OrderListPage() {
         ) : (
           <div className="p-4 space-y-3">
             {orders.map(order => {
-                const statusInfo = ORDER_STATUS_MAP[order.status]
                 const borderColor = statusBorderMap[order.status] || 'border-l-slate-300'
                 const statusBg = statusBgMap[order.status] || 'bg-slate-50 text-slate-500'
                 const iconEl = statusIconMap[order.status]

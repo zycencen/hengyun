@@ -79,9 +79,9 @@ export interface OrderInfo {
   amount: number
   serviceFee: number
   total: number
-  kmLimit: number        // 里程限制(km)
-  overtimeRate: number   // 超时费率(元/h)
-  overKmRate: number     // 超公里费率(元/km)
+  kmLimit?: number       // 里程限制(km)
+  overtimeRate?: number  // 超时费率(元/h)
+  overKmRate?: number    // 超公里费率(元/km)
   status: OrderStatus
   createdAt: string
   customerName?: string    // 下单人
@@ -202,6 +202,7 @@ export interface ContractInfo {
   contractNo: string
   partyA: string          // 甲方
   partyB: string          // 乙方
+  orgName?: string        // 所属组织
   origin: string          // 出发地
   destination: string     // 目的地
   plateNo: string         // 车牌号

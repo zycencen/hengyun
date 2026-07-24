@@ -111,13 +111,6 @@ export function DriverManagePage() {
     return true
   })
 
-  // 查找车辆名称
-  const getVehicleLabel = (carId?: number | null) => {
-    if (!carId) return ''
-    const v = vehicles.find(x => x.id === carId)
-    return v ? `${v.plate || v.name} · ${v.model} ${v.seats}座` : ''
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">

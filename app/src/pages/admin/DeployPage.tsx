@@ -3,7 +3,6 @@ import { Server, RefreshCw, ArrowRight, CheckCircle, XCircle, AlertCircle, Loade
 import { getSyncStatus, syncToProd, type SyncStatusResult } from '@/api/modules/admin'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { icon: React.ReactNode; label: string; className: string }> = {
@@ -30,7 +29,7 @@ export default function DeployPage() {
     setLoading(true)
     try {
       const res = await getSyncStatus()
-      setStatus(res.data)
+      setStatus(res)
     } catch {
       // 本地开发环境 API 不可用
       setStatus({
@@ -50,11 +49,7 @@ export default function DeployPage() {
     setSyncResult(null)
     try {
       const res = await syncToProd()
-      if (res.code === 200) {
-        setSyncResult(res.data.output || '同步完成')
-      } else {
-        setSyncResult((res as any).data?.output || res.message || '同步失败')
-      }
+      setSyncResult(res.output || '同步完成')
       await loadStatus()
     } catch (e: any) {
       setSyncResult(e?.message || '同步请求失败')
