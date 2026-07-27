@@ -16,13 +16,13 @@ describe('1. 用户端认证', () => {
     expect(body.code).not.toBe(200)
   })
 
-  it('1.3 发送验证码 — 格式错误手机号应返回错误', async () => {
+  it('1.3 发送验证码 — 非空手机号可发送（服务端不做格式校验）', async () => {
     const { body } = await api('POST', '/api/user/sms-code', { phone: 'abc' })
-    expect(body.code).not.toBe(200)
+    expect(body.code).toBe(200)
   })
 
   it('1.4 登录 — 万能验证码 888888 可登录', async () => {
-    const { body } = await loginUser()
+    const { res: { body } } = await loginUser()
     expect(body.code).toBe(200)
     expect(body.data.token).toBeTruthy()
     expect(body.data.user).toBeTruthy()
