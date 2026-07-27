@@ -6,18 +6,18 @@ import { api, loginUser, loginAdmin, state, DEV_CODE } from './helpers.js'
 
 describe('1. 用户端认证', () => {
   it('1.1 发送验证码 — 正确手机号应返回成功', async () => {
-    const { status, body } = await api('POST', '/api/user/send-code', { phone: '13800000001' })
+    const { status, body } = await api('POST', '/api/user/sms-code', { phone: '13800000001' })
     expect(status).toBe(200)
     expect(body.code).toBe(200)
   })
 
   it('1.2 发送验证码 — 空手机号应返回错误', async () => {
-    const { body } = await api('POST', '/api/user/send-code', { phone: '' })
+    const { body } = await api('POST', '/api/user/sms-code', { phone: '' })
     expect(body.code).not.toBe(200)
   })
 
   it('1.3 发送验证码 — 格式错误手机号应返回错误', async () => {
-    const { body } = await api('POST', '/api/user/send-code', { phone: 'abc' })
+    const { body } = await api('POST', '/api/user/sms-code', { phone: 'abc' })
     expect(body.code).not.toBe(200)
   })
 
@@ -29,7 +29,7 @@ describe('1. 用户端认证', () => {
   })
 
   it('1.5 登录 — 错误验证码返回错误', async () => {
-    await api('POST', '/api/user/send-code', { phone: '13800000002' })
+    await api('POST', '/api/user/sms-code', { phone: '13800000002' })
     const { body } = await api('POST', '/api/user/login', { phone: '13800000002', code: '000000' })
     expect(body.code).not.toBe(200)
   })
@@ -59,12 +59,12 @@ describe('2. 管理端认证', () => {
   })
 
   it('2.2 管理员登录 — 错误密码返回错误', async () => {
-    const { body } = await api('POST', '/api/admin/login', { username: 'admin', password: 'wrong' })
+    const { body } = await api('POST', '/api/user/admin/login', { username: 'admin', password: 'wrong' })
     expect(body.code).not.toBe(200)
   })
 
   it('2.3 管理员登录 — 不存在用户返回错误', async () => {
-    const { body } = await api('POST', '/api/admin/login', { username: 'nonexistent', password: '123456' })
+    const { body } = await api('POST', '/api/user/admin/login', { username: 'nonexistent', password: '123456' })
     expect(body.code).not.toBe(200)
   })
 

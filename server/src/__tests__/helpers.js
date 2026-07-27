@@ -38,7 +38,7 @@ async function api(method, path, body = null, headers = {}) {
 async function loginUser(phone = null) {
   const p = phone || `138${String(Math.floor(Math.random() * 90000000 + 10000000))}`
   state.testPhone = p
-  await api('POST', '/api/user/send-code', { phone: p })
+  await api('POST', '/api/user/sms-code', { phone: p })
   const res = await api('POST', '/api/user/login', { phone: p, code: DEV_CODE })
   if (res.body?.code === 200) {
     state.userToken = res.body.data.token
@@ -47,7 +47,7 @@ async function loginUser(phone = null) {
 }
 
 async function loginAdmin(username = 'admin', password = '123456') {
-  const res = await api('POST', '/api/admin/login', { username, password })
+  const res = await api('POST', '/api/user/admin/login', { username, password })
   if (res.body?.code === 200) {
     state.adminToken = res.body.data.token
   }
