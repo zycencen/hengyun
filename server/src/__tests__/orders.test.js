@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 async function createTestOrder(overrides = {}) {
   const orderData = {
-    car_id: 1,
+    carId: 1,
     start_date: '2026-08-01', end_date: '2026-08-01',
     start_time: '08:00', end_time: '18:00',
     start_addr: '深圳宝安机场', end_addr: '广州白云机场',
@@ -33,19 +33,19 @@ describe('3. 用户端订单', () => {
   })
 
   it('3.2 创建订单 — 缺少必填字段返回错误', async () => {
-    const { body } = await userPost('/api/order/create', { car_id: 1 })
+    const { body } = await userPost('/api/order/create', { carId: 1 })
     expect(body.code).not.toBe(200)
   })
 
   it('3.3 创建订单 — 未登录返回 401', async () => {
-    const { body } = await api('POST', '/api/order/create', { car_id: 1, start_date: '2026-08-01', end_date: '2026-08-01', start_time: '08:00', end_time: '18:00', start_addr: 'A', end_addr: 'B', contact_name: 'X', contact_phone: '13800000004', passenger_count: 1 })
+    const { body } = await api('POST', '/api/order/create', { carId: 1, start_date: '2026-08-01', end_date: '2026-08-01', start_time: '08:00', end_time: '18:00', start_addr: 'A', end_addr: 'B', contact_name: 'X', contact_phone: '13800000004', passenger_count: 1 })
     expect(body.code).toBe(401)
   })
 
   it('3.4 订单列表 — 已登录可获取', async () => {
     const { body } = await userGet('/api/order/list')
     expect(body.code).toBe(200)
-    expect(Array.isArray(body.data)).toBe(true)
+    expect(Array.isArray(body.data.list)).toBe(true)
   })
 
   it('3.5 订单详情 — 有效ID可获取', async () => {

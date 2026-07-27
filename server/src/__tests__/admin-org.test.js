@@ -50,8 +50,10 @@ describe('14. 角色管理', () => {
   })
 
   it('14.2 创建角色', async () => {
+    const ts = Date.now()
     const { body } = await adminPost('/api/admin/roles', {
-      name: `测试角色_${Date.now()}`,
+      name: `测试角色_${ts}`,
+      code: `test_role_${ts}`,
       permissions: JSON.stringify(['order.view', 'order.edit']),
     })
     console.log('[14.2] 创建角色:', JSON.stringify(body))
@@ -123,6 +125,7 @@ describe('16. 车队管理', () => {
 
   it('16.2 创建车队', async () => {
     const { body } = await adminPost('/api/admin/fleets', {
+      orgId: 'ORG001',
       name: `测试车队_${Date.now()}`,
       leader: '队长',
       phone: '13800001111',
