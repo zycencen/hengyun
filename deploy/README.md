@@ -3,22 +3,24 @@
 ## 架构概览
 
 ```
-                     ┌─────────────────────────────────┐
-                     │          Nginx (80/443)          │
-                     │  your-domain.com → 正式前端      │
-                     │  test.your-domain.com → 测试前端  │
-                     └──────┬───────────────┬──────────┘
-                            │ /api          │ /api
-                     ┌──────▼──────┐  ┌─────▼───────┐
-                     │ 正式后端      │  │ 测试后端     │
-                     │ 端口 8082    │  │ 端口 8081    │
-                     │ PM2: prod    │  │ PM2: test   │
-                     └──────────────┘  └─────────────┘
-                            │                  │
-                     ┌──────▼──────┐  ┌─────▼───────┐
-                     │ 正式数据库    │  │ 测试数据库    │
-                     │ data.db     │  │ data.db     │
-                     └──────────────┘  └─────────────┘
+                       ┌──────────────────────────────────────────┐
+                       │           Nginx (80/443)                  │
+                       │  go.hengyunbus.cn        → 正式用户端      │
+                       │  admin.hengyunbus.cn     → 正式管理端      │
+                       │  test.go.hengyunbus.cn   → 测试用户端      │
+                       │  test.admin.hengyunbus.cn → 测试管理端     │
+                       └──────┬─────────────────────┬──────────────┘
+                              │ /api, /uploads      │ /api, /uploads
+                       ┌──────▼──────┐       ┌─────▼───────┐
+                       │ 正式后端      │       │ 测试后端     │
+                       │ 端口 8082    │       │ 端口 8081    │
+                       │ PM2: prod    │       │ PM2: test   │
+                       └──────────────┘       └─────────────┘
+                              │                       │
+                       ┌──────▼──────┐       ┌─────▼───────┐
+                       │ data.db     │       │ data.db     │
+                       │ /opt/…/prod │       │ /opt/…/test │
+                       └──────────────┘       └─────────────┘
 ```
 
 **两个环境完全隔离**：独立的端口、进程、数据库、上传文件。
@@ -97,8 +99,8 @@ bash /opt/hengyun/test/deploy/setup-server.sh
 替换配置文件中的域名占位符（替换为你的实际域名）：
 
 ```bash
-# 修改 Nginx 配置（将 your-domain.com 替换为实际域名）
-sed -i 's/your-domain.com/你的域名.com/g' /opt/hengyun/test/deploy/nginx-hengyun.conf
+# 修改 Nginx 配置（将 hengyunbus.cn 替换为实际域名）
+sed -i 's/hengyunbus.cn/你的域名.com/g' /opt/hengyun/test/deploy/nginx-hengyun.conf
 
 # 部署 Nginx 配置
 sudo cp /opt/hengyun/test/deploy/nginx-hengyun.conf /etc/nginx/conf.d/hengyun.conf
@@ -133,12 +135,14 @@ sudo nginx -s reload
 
 ### 第八步：配置 DNS 解析
 
-登录域名管理后台，添加两条 A 记录：
+登录域名管理后台，添加四条 A 记录：
 
-| 类型 | 主机记录 | 记录值 |
-|------|---------|--------|
-| A    | `@`     | 你的服务器 IP |
-| A    | `test`  | 你的服务器 IP |
+| 类型 | 主机记录 | 记录值 | 用途 |
+|------|---------|--------|------|
+| A    | `go` | 服务器 IP | 正式用户端 |
+| A    | `admin` | 服务器 IP | 正式管理端 |
+| A    | `test.go` | 服务器 IP | 测试用户端 |
+| A    | `test.admin` | 服务器 IP | 测试管理端 |
 
 ---
 
@@ -212,7 +216,7 @@ cp /opt/hengyun/prod/data.db /opt/hengyun/backups/prod_$(date +%Y%m%d).db
    ```bash
    # Certbot 自动配置
    sudo apt install certbot python3-certbot-nginx  # Ubuntu/Debian
-   sudo certbot --nginx -d your-domain.com -d test.your-domain.com
+   sudo certbot --nginx -d go.hengyunbus.cn -d admin.hengyunbus.cn -d test.go.hengyunbus.cn -d test.admin.hengyunbus.cn
    ```
 4. **防火墙**：仅开放 80/443 端口，后端端口 8081/8082 不对外开放
 5. **数据库备份**：定期备份 `data.db`，建议加入 crontab

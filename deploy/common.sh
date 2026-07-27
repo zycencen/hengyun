@@ -4,10 +4,11 @@
 # ============================================================
 
 # 正式域名（不含 http://）
-DOMAIN="your-domain.com"
+# 当前实际部署: hengyunbus.cn, 四子域: go / admin / test.go / test.admin
+DOMAIN="hengyunbus.cn"
 
 # 测试子域名
-TEST_DOMAIN="test.your-domain.com"
+TEST_DOMAIN="test.admin.hengyunbus.cn"
 
 # 项目根目录
 BASE_DIR="/opt/hengyun"

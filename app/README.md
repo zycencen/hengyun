@@ -49,3 +49,14 @@ cd app && npm run dev
 - 开发环境万能验证码：`888888`
 - 管理端默认密码：`123456`
 - 数据库文件：`server/data.db`
+
+## 线上地址
+
+| 域名 | 用途 | 环境 |
+|------|------|------|
+| `go.hengyunbus.cn` | 用户端 | 正式 |
+| `admin.hengyunbus.cn` | 管理端 | 正式 |
+| `test.go.hengyunbus.cn` | 用户端 | 测试 |
+| `test.admin.hengyunbus.cn` | 管理端 | 测试 |
+
+详见 [部署文档](../deploy/README.md)。

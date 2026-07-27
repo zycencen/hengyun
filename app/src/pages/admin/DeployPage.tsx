@@ -85,7 +85,7 @@ export default function DeployPage() {
               <Server className="w-5 h-5 text-amber-600" />
               <h3 className="font-semibold text-slate-800">测试环境</h3>
             </div>
-            <p className="text-xs text-slate-500">test.your-domain.com</p>
+            <p className="text-xs text-slate-500">test.admin.hengyunbus.cn</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -108,7 +108,7 @@ export default function DeployPage() {
               <Server className="w-5 h-5 text-blue-600" />
               <h3 className="font-semibold text-slate-800">正式环境</h3>
             </div>
-            <p className="text-xs text-slate-500">your-domain.com</p>
+            <p className="text-xs text-slate-500">admin.hengyunbus.cn</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
